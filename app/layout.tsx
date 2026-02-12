@@ -25,10 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${dmSans.variable} ${bricolageGrotesque.variable}`}>
-      <body
-      // className={`${dmSans.variable} ${bricolageGrotesque.variable} antialiased`}
-        // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body>
         {children}
       </body>
     </html>
