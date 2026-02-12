@@ -46,6 +46,14 @@
     @apply hover:shadow-md;
     @apply active:translate-y-0;
   }
+  /* ––––––– PAGES ––––––– */
+  .container{
+    @apply flex flex-col items-center;
+  }
+
+  main{
+    @apply flex min-h-screen w-full max-w-3xl flex-col items-center p-4;
+  }
 
 
   /* ––––––– SEARCH ––––––– */
@@ -67,7 +75,7 @@
 
   /* ––––––– HEADER ––––––– */
   header {
-    @apply flex items-center justify-between p-4;
+    @apply flex items-center justify-between p-4 w-full;
   }
 
   .units-dropdown{
