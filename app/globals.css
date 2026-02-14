@@ -10,7 +10,7 @@
   --color-neutral-200: hsl(250, 6%, 84%);
   --color-neutral-0: hsl(0, 0%, 100%);
   /* orange */
-  --color-orange-500:  hsl(28, 100%, 52%);
+  --color-orange-500: hsl(28, 100%, 52%);
   /* blue */
   --color-blue-500: hsl(233, 67%, 56%);
   --color-blue-700: hsl(248, 70%, 36%);
@@ -23,19 +23,19 @@
   --font-display: var(--font-bricolage-grotesque);
 }
 
-@layer base{
+@layer base {
   body {
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans);
+    @apply flex justify-center;
   }
 
-  h1, h2 {
+  h1,
+  h2 {
     font-family: var(--font-display);
   }
 }
-
-
 
 @layer components {
   /* Button Primary */
@@ -46,43 +46,91 @@
     @apply hover:shadow-md;
     @apply active:translate-y-0;
   }
+
+  .card {
+    @apply rounded-xl bg-neutral-700 p-4;
+  }
+
+  /* ––––––– DROPDOWN ––––––– */  
+  .dropdown {
+    @apply rounded-md bg-neutral-600 py-2 px-4 flex justify-between relative gap-1;
+  }
+
+  .dropdown__options-container {
+    @apply absolute bg-neutral-700 rounded-md p-2 right-auto mt-2 w-48 shadow-lg;
+    @apply flex flex-col gap-2;
+    @apply border-neutral-500 border-2;
+    @apply top-full right-0;
+  }
+
   /* ––––––– PAGES ––––––– */
-  .container{
+  .container {
     @apply flex flex-col items-center;
   }
 
-  main{
-    @apply flex min-h-screen w-full max-w-3xl flex-col items-center p-4;
+  main {
+    @apply flex min-h-screen w-full max-w-3xl flex-col items-center p-4 gap-4;
   }
-
 
   /* ––––––– SEARCH ––––––– */
   /* Search Container */
   .search-container {
     @apply flex flex-col sm:flex-row gap-4 mt-8 w-full max-w-md;
   }
-  
+
   /* Search Input Wrapper */
   .search-input-wrapper {
     @apply bg-neutral-700 flex gap-2 px-4 py-2 rounded-md items-center w-full;
   }
-  
+
   /* Search Input */
   .search-input {
     @apply w-full outline-none bg-transparent text-neutral-0 placeholder:text-neutral-300;
   }
-  
 
   /* ––––––– HEADER ––––––– */
   header {
     @apply flex items-center justify-between p-4 w-full;
   }
 
-  .units-dropdown{
-    @apply flex bg-neutral-700 rounded-md py-2 px-4;
+  .units-dropdown {
+    @apply flex bg-neutral-700 rounded-md py-2 px-4 relative;
   }
 
-  .units-dropdown-label{
-    @apply  flex items-center gap-2 ;
+  .units-dropdown-label {
+    @apply flex items-center gap-2;
+  }
+
+  .dropdown-header {
+    @apply absolute right-0 mt-2 w-48 bg-neutral-700 rounded shadow-lg p-4 z-10 text-neutral-300;
+  }
+
+  /* ––––––– HOURLY ––––––– */
+  .hourly {
+    @apply flex flex-col gap-2 w-full;
+  }
+
+  .hourly__item {
+    @apply rounded-md bg-neutral-600 p-2 flex w-full items-center;
+  }
+
+  .hourly_header {
+    @apply flex justify-between items-center;
+  }
+
+  /* ––––––– LOCATION ––––––– */
+  .location {
+    @apply max-w-full sm:w-2/3 w-full;
+  }
+  .details__item {
+    @apply flex flex-wrap gap-4 justify-center;
+  }
+
+  /* ––––––– DAILY ––––––– */
+  .daily{
+    @apply flex flex-col gap-1;
+  }
+  .daily__item{
+    @apply flex flex-row flex-wrap gap-1;
   }
 }
