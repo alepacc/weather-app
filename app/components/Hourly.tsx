@@ -24,57 +24,22 @@ export default function Hourly() {
           onChange={setDay}
         />
       </span>
-
-      <div className="hourly__item">
-        <span className="hourly__time">Now</span>
-        <Image
-          src="/images/icon-sunny.webp"
-          alt="sunny icon"
-          width={30}
-          height={30}
-        />
-        <span className="hourly__temp">20°</span>
-      </div>
-      <div className="hourly__item">
-        <span className="hourly__time">1 PM</span>
-        <Image
-          src="/images/icon-sunny.webp"
-          alt="sunny icon"
-          width={30}
-          height={30}
-        />
-        <span className="hourly__temp">20°</span>
-      </div>
-      <div className="hourly__item">
-        <span className="hourly__time">2 PM</span>
-        <Image
-          src="/images/icon-sunny.webp"
-          alt="sunny icon"
-          width={30}
-          height={30}
-        />
-        <span className="hourly__temp">20°</span>
-      </div>
-      <div className="hourly__item">
-        <span className="hourly__time">3 PM</span>
-        <Image
-          src="/images/icon-sunny.webp"
-          alt="sunny icon"
-          width={30}
-          height={30}
-        />
-        <span className="hourly__temp">20°</span>
-      </div>
-      <div className="hourly__item">
-        <span className="hourly__time">4 PM</span>
-        <Image
-          src="/images/icon-sunny.webp"
-          alt="sunny icon"
-          width={30}
-          height={30}
-        />
-        <span className="hourly__temp">20°</span>
-      </div>
+      
+      {Array.from({ length: 8 }, (_, i) => (
+        <div key={i} className="hourly__item">
+          <span className="hourly__time">
+             <Image
+                src="/images/icon-sunny.webp"
+                alt="sunny icon"
+                width={30}
+                height={30}
+              />
+            {i + 1} PM
+          </span>
+          
+          <span className="hourly__temp">20°</span>
+        </div>
+      ))}
     </div>
   );
 }

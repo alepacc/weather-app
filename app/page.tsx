@@ -12,9 +12,16 @@ export default function Home() {
       <main>
         <h1 className="text-5xl font-display text-center">How's the sky looking today?</h1>
         <Search/>
-        <Location />
-        <Daily  />
-        <Hourly />
+        <section className="lg:flex gap-4">
+          <article className="weather">
+            <Location />
+            <Daily  />
+          </article>
+          <aside className="weather__hourly">
+            <Hourly />
+          </aside>
+        </section>
+     
       </main>
     </div>
   );

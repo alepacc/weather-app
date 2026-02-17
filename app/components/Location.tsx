@@ -3,10 +3,12 @@ export default function Location() {
     return (
     <>
         <div className="location card">
-            <h2 className="location__name">location</h2>
-            <h3 className="location__date">date</h3>
+            <span className="location__header">
+                <h2 className="location__name">location</h2>
+                <h3 className="location__date">date</h3>
+            </span>
             <span className="location__condition">
-                <Image src="/images/icon-sunny.webp" alt="sunny icon" width={40} height={40} />
+                <Image src="/images/icon-sunny.webp" alt="sunny icon" width={100} height={100} />
                 <h1 className="location__temperature">20°</h1>
             </span>
             

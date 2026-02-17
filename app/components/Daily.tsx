@@ -1,7 +1,7 @@
 import Image  from "next/image";
 
 export default function Daily() {
-    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
     return(
         <div className="daily">
@@ -9,9 +9,14 @@ export default function Daily() {
           <div className="daily__item">
             {days.map((day) => (
               <div key={day} className="daily__forcast card">
-                <span className="daily__forcast-day">{day[0]}</span>
-                <Image src="/images/icon-sunny.webp" alt="sunny icon" width={30} height={30} />
-                <span className="daily__forcast-temp">20°</span>
+                <span className="daily__forcast-day">{day}</span>
+                <span className="daily__forcast-icon">
+                  <Image src="/images/icon-sunny.webp" alt="sunny icon" width={50} height={50} />
+                </span>
+                <span className="daily__forcast-temp">
+                  <p className="temp-max">20°</p> 
+                  <p className="temp-min">10°</p>
+                </span>
               </div>
             ))}
             </div>
