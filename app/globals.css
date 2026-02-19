@@ -79,10 +79,11 @@
 
   /* ––––––– SEARCH ––––––– */
   /* Search Container */
-  .search-container {
+  .search-container, form {
     @apply flex flex-col sm:flex-row gap-4 mt-8 w-full max-w-md;
   }
 
+  
   /* Search Input Wrapper */
   .search-input-wrapper {
     @apply bg-neutral-700 flex gap-2 px-4 py-2 rounded-md items-center w-full;
@@ -127,7 +128,7 @@
 
 
 
-  /* ––––––– LOCATION ––––––– */
+  /* ––––––– CURRENT WEATHER ––––––– */
   .location {
     @apply rounded-2xl bg-cover bg-center bg-no-repeat;
     @apply h-60 bg-[url(/images/bg-today-small.svg)] md:bg-[url(/images/bg-today-large.svg)];

@@ -1,5 +1,5 @@
 import Image from "next/image"
-export default function Location() {
+export default function CurrentWeather() {
     return (
     <>
         <div className="location card">
