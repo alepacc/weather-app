@@ -31,34 +31,35 @@ export default function CurrentWeather(
     <>
         <div className="location card">
             <span className="location__header">
-                <h2 className="location__name">{city}, {country}</h2>
+                <h2 className="location__name">{city&&`${city}, ${country}`}</h2>
                 <h3 className="location__date">{date ? formatDate(date) : "Loading..."}</h3>
             </span>
             <span className="location__condition">
                 {condition !== undefined ? (
                     <Image src={weatherCodeMap[condition]?.image } alt={weatherCodeMap[condition]?.desc } width={100} height={100} />
-                ) : (<p>No weather data available</p>)}
-                <h1 className="location__temperature">{temperature}°</h1>
+                ) : ('Loading...')}
+                <h1 className="location__temperature">{temperature !== undefined && `${temperature}°`}</h1>
             </span>
             
         </div>
-        <div className="details__item">
+        <div className="details__item"> 
+            {/* TODO: add measure units */}
             <div className="details__item--temperature card min-w-34">
                 <h3>Feels like</h3>
-                <span className="detail--temp">{feelsLike}°</span>
+                <span className="detail--temp">{feelsLike !== undefined ? `${feelsLike}°` : '__' }</span>
             </div>
             <div className="details__item--condition card  min-w-34">
                 <h3>Humidity</h3>
                 
-                <span className="detail--humidity">{humidity}%</span>
+                <span className="detail--humidity">{humidity !== undefined ? `${humidity}%` : '__'}</span>
             </div>
             <div className="details__item--wind card  min-w-34">
                 <h3>Wind</h3>
-                <span className="detail--wind">{windSpeed} km/h</span>
+                <span className="detail--wind">{windSpeed !== undefined ? `${windSpeed} km/h` : '__'}</span>
             </div>
             <div className="details__item--precipitation card  min-w-34">
                 <h3>Precipitation</h3>
-                <span className="detail--prec">{precipitation} mm</span>
+                <span className="detail--prec">{precipitation !== undefined ? `${precipitation} mm` : '__'}</span>
             </div>
         </div>
     </>
