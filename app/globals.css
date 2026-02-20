@@ -40,7 +40,7 @@
 @layer components {
   /* Button Primary */
   .btn-primary {
-    @apply rounded-md bg-blue-500 text-neutral-0 font-semibold;
+    @apply rounded-xl bg-blue-500 text-neutral-0 font-semibold;
     @apply px-4 py-2 w-full md:w-auto;
     @apply transition-all;
     @apply hover:shadow-md;
@@ -79,14 +79,18 @@
 
   /* ––––––– SEARCH ––––––– */
   /* Search Container */
-  .search-container, form {
+  .search-container{
     @apply flex flex-col sm:flex-row gap-4 mt-8 w-full max-w-md;
+  }
+  
+  form {
+    @apply flex flex-col sm:flex-row gap-4 w-full max-w-md;
   }
 
   
   /* Search Input Wrapper */
   .search-input-wrapper {
-    @apply bg-neutral-700 flex gap-2 px-4 py-2 rounded-md items-center w-full;
+    @apply bg-neutral-700 flex gap-2 px-4 py-2 rounded-xl items-center w-full;
   }
 
   /* Search Input */
