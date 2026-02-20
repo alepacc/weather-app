@@ -54,7 +54,12 @@ export default function Home() {
             />
           </article>
           <aside className="weather__hourly">
-            <Hourly />
+            <Hourly 
+              currentTime={weather.current.time}
+              weatherCode={weather.hourly?.weather_code}
+              temperature = {weather.hourly?.temperature_2m}
+              time={weather.hourly?.time}
+            />
           </aside>
         </section>
      

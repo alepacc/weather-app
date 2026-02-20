@@ -32,7 +32,7 @@ export default function CurrentWeather(
         <div className="location card">
             <span className="location__header">
                 <h2 className="location__name">{city&&`${city}, ${country}`}</h2>
-                <h3 className="location__date">{date ? formatDate(date) : "Loading..."}</h3>
+                <h3 className="location__date">{date ? formatDate(date) : ""}</h3>
             </span>
             <span className="location__condition">
                 {condition !== undefined ? (
