@@ -1,5 +1,6 @@
 import Image from "next/image"
 import { weatherCodeMap } from "../utils/weatherCodeMap"
+import { formatDate }  from "../utils/formatDate"
 
 export default function CurrentWeather(
     props: { 
@@ -15,17 +16,6 @@ export default function CurrentWeather(
     }
 ) {
     const { city, country, date, temperature, condition, feelsLike, humidity, windSpeed, precipitation } = props;
-
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-
-        return new Intl.DateTimeFormat("en-US", {
-            weekday: "long",
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-        }).format(date);
-    };
 
     return (
     <>
