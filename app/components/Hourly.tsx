@@ -45,22 +45,22 @@ export default function Hourly(props: {
   // filter the hourly data to show only the hours of the selected day, and slice it to show only the next 8 hours
   const filteredHourly = useMemo(() => {
     if (!formattedHourly || !day) return [];
-    return formattedHourly.filter((item) => item.day === day).slice(12, 20);
+    return formattedHourly.filter((item) => item.day === day);
   }, [formattedHourly, day]);
 
   return (
     <>
-      <div className="hourly card">
-        <span className="hourly_header">
+      <div className="hourly card ">
+        <span className="hourly_header ">
           <h2 className="hourly__title">Hourly forecast</h2>
           <Dropdown
-            label="--"
+            label="—"
             option={weekDays}
             value={day}
             onChange={setDay}
           />
         </span>
-
+        <div className="hourly__list">
         {filteredHourly.map((item, index) => (
           <div key={index} className="hourly__item">
             <span className="hourly__time">
@@ -76,6 +76,7 @@ export default function Hourly(props: {
             <span className="hourly__temp">{item.temperature}°</span>
           </div>
         ))}
+        </div>
       </div>
     </>
   );
