@@ -33,7 +33,7 @@ export default function Dropdown({
         { isOpen ? ( 
           <ChevronUp className="dropdown-chevron" />
         ) : (
-          <Image src="/images/icon-dropdown.svg" alt="dropdown icon" width={20} height={20} className="dropdown-chevron" />
+          <Image src="/images/icon-dropdown.svg" alt="dropdown icon" width={16} height={16} className="dropdown-chevron" />
         )}
         {isOpen && (
           <ul className="dropdown__options-container">

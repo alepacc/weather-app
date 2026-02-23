@@ -34,7 +34,7 @@ export default function Home() {
         <h1 className="text-5xl font-display text-center">How's the sky looking today?</h1>
         <Search onSearch={handleSearch}/>
         <section className="lg:flex gap-4">
-          <article className="weather">
+          <article>
             
             <CurrentWeather 
               city={location?.name} 
@@ -53,7 +53,7 @@ export default function Home() {
               tempMin={weather.daily?.temperature_2m_min}
             />
           </article>
-          <aside className="weather__hourly">
+          <aside>
             <Hourly 
               currentTime={weather.current.time}
               weatherCode={weather.hourly?.weather_code}
