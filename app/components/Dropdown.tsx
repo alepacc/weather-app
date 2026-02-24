@@ -1,7 +1,7 @@
 'use client';
 import Image from "next/image";
 import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Zap } from "lucide-react";
 
 type DropdownProps = {
   label: string;
@@ -28,7 +28,7 @@ export default function Dropdown({
 
   return (
     <>
-      <div className="dropdown" onClick={() => setIsOpen((prev) => !prev)}>
+      <div className="dropdown" onClick={() => setIsOpen((prev) => !prev)}> 
         {value ?? label}
         { isOpen ? ( 
           <ChevronUp className="dropdown-chevron" />
@@ -40,7 +40,12 @@ export default function Dropdown({
           <ul className="dropdown__options-container">
             {option.map((opt) => (
               <li key={opt}>
-                <button onClick={() => handleSelected(opt)} className="hover:cursor-pointer w-full flex justify-start px-2 py-1">{opt}</button>
+                {(value === opt) ? (
+                  <button onClick={() => handleSelected(opt)} className="btn-dropdown-item active_btn">{opt}</button>
+                ): (
+                  <button onClick={() => handleSelected(opt)} className="btn-dropdown-item">{opt}</button>
+                )
+                }
               </li>
             ))}
         </ul>

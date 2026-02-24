@@ -70,6 +70,14 @@
     @apply top-full right-0;
   }
 
+  .btn-dropdown-item {
+    @apply hover:cursor-pointer w-full flex justify-start px-2 py-1;
+  }
+
+  .active_btn{
+    @apply bg-neutral-600 rounded;
+  }
+
   /* ––––––– PAGES ––––––– */
   .container {
     @apply flex flex-col items-center max-w-3xl;
