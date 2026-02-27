@@ -1,25 +1,14 @@
-import { NextResponse } from "next/server"; 
+import { NextResponse } from "next/server";
 
-export async function GET(req:Request) {
-    const {searchParams } = new URL(req.url);
-    const city = searchParams.get("city");
-
-    if(!city){
-        return NextResponse.json({ error: "City required" }, { status: 400 });
-    }
-
-    // get geo coordinates by city name
-    const geoRes = await fetch(
-        `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1`
-    );
-
-    const geoData = await geoRes.json();
-
-    if (!geoData.results || geoData.results.length === 0) {
-        return NextResponse.json({ error: "City not found" }, { status: 404 });
-    }
-
-    const { latitude, longitude, name, country } = geoData.results[0];  
+export async function GET(req:Request){
+    const { searchParams } = new URL(req.url);
+    
+    const { latitude, longitude, name, country } = {
+        latitude: searchParams.get("latitude"),
+        longitude: searchParams.get("longitude"),
+        name: searchParams.get("name"),
+        country: searchParams.get("country"),
+    };
 
     const params = {
         daily: ["temperature_2m_min", "temperature_2m_max", "weather_code"],
@@ -39,5 +28,4 @@ export async function GET(req:Request) {
         location: { name, country },
         weather: weatherData,
     });
-
 }

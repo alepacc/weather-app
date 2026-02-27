@@ -4,11 +4,38 @@ import Search from "./components/Search";
 import CurrentWeather from "./components/CurrentWeather"
 import Daily from "./components/Daily";
 import Hourly from "./components/Hourly";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [location, setLocation] = useState<{ name: string; country: string }>({ name: "", country: "" });
-  const [weather, setWeather] = useState({ current: {} } as any);
+  const [city, setCity] = useState("");
+  const [debouncedCity, setDebouncedCity] = useState("");
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [weather, setWeather] = useState({current: {}} as any);
+  const [location, setLocation] = useState<{ name: string; country: string } | null>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedCity(city);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [city]);
+
+  useEffect(() => {
+    if (!debouncedCity) {
+      setSuggestions([]);
+      return;
+    }
+
+    const fetchCities = async () => {
+      const res = await fetch(`/api/search?city=${debouncedCity}`);
+      const data = await res.json();
+      setSuggestions(data.locations || []);
+    };
+
+    fetchCities();
+    console.log("suggestion cities:", suggestions);
+  }, [debouncedCity]);
 
 
   const handleSearch = (city: string) => {
@@ -26,13 +53,32 @@ export default function Home() {
       });
   }
 
+  const handleSelectCity = async (city: any) => {
+    const res = await fetch(
+      `/api/weather?lat=${city.latitude}&lon=${city.longitude}&name=${city.name}&country=${city.country}`
+    );
+
+    const data = await res.json();
+
+    setLocation(data.location);
+    setWeather(data.weather);
+    setSuggestions([]); // chiude dropdown
+  };
+
 
   return (
     <div className="container">
     <Header/>
       <main>
         <h1 className="text-5xl font-display text-center">How's the sky looking today?</h1>
-        <Search onSearch={handleSearch}/>
+        <Search 
+        
+        onSearch={handleSearch}
+         value={city}
+  onChange={setCity}
+  suggestions={suggestions}
+  onSelect={handleSelectCity}  
+        />
         <section className="lg:flex gap-4">
           <article>
             
