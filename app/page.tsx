@@ -47,11 +47,14 @@ export default function Home() {
               condition={weather?.current?.weather_code}
               precipitation={weather?.current?.precipitation}
             />
+          {weather?.daily && (
             <Daily 
-              weatherCode={weather.daily?.weather_code}
-              tempMax={weather.daily?.temperature_2m_max}
-              tempMin={weather.daily?.temperature_2m_min}
+              days={weather.daily.time}
+              weatherCode={weather.daily.weather_code}
+              tempMax={weather.daily.temperature_2m_max}
+              tempMin={weather.daily.temperature_2m_min}
             />
+          )}
           </article>
           <aside>
             <Hourly 

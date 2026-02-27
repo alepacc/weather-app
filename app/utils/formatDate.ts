@@ -6,11 +6,19 @@ export const getTimeShort = (dateString: string) => {
   }).format(date);
 };
 
-export const getDay = (dateString: string) => {
-  const date = new Date(dateString);
 
+
+/**
+ * Returns the weekday name from a date string.
+ * @param dateString - The date string to format.
+ * @param short - Whether to return a short or long weekday name. Default is false.
+ * @returns The formatted weekday name.
+ */
+export const getDay = (dateString: string, short: boolean = false) : string => {
+  const date = new Date(dateString);
+  
   return new Intl.DateTimeFormat("en-US", {
-    weekday: "long",
+    weekday: short ? "short" : "long",
   }).format(date);
 };
 
