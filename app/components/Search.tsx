@@ -2,17 +2,17 @@
 import { useState } from "react";
 
 export default function Search({
-  onSearch,
   value,
   onChange,
   suggestions,
   onSelect,
+  loading,
 }: {
-  onSearch: (city: string) => void;
   value: string;
   onChange: (city: string) => void;
   suggestions: any[];
   onSelect: (city: any) => void;
+  loading: boolean;
 }) {
   const [city, setCity] = useState(value);
 
@@ -21,13 +21,12 @@ export default function Search({
     if (suggestions.length > 0) {
       onSelect(suggestions[0]); // fallback to first suggestion if user submits without selecting
     }
+    // setCity("");
   };
 
   return (
     <div className="search-container">
-      <form
-        onSubmit={handleSearch}
-      >
+      <form onSubmit={handleSearch}>
         <div className="search-input-wrapper ">
           <img
             src="/images/icon-search.svg"
@@ -49,13 +48,17 @@ export default function Search({
           />
           {suggestions.length > 0 ? (
             <ul className="suggestions-list">
-            {suggestions.map((suggestion, index) => (
-              <li key={index} className="suggestion" onClick={() => onSelect(suggestion) }>
-                {suggestion.name}, {suggestion.country}, {suggestion.admin1}
-              </li>
-            ))}
-          </ul>
-          ) : null}
+              {suggestions.map((suggestion, index) => (
+                <li key={index} className="suggestion" onClick={() => { onSelect(suggestion); setCity(""); }}>
+                  {suggestion.name}, {suggestion.country}, {suggestion.admin1}
+                </li>
+              ))}
+            </ul>
+          ) : 
+           loading && (<div className="suggestions-list">Loading...</div>
+           )  
+            
+          }
           
         </div>
         <button id="search-button" type="submit" className="btn-primary">

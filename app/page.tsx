@@ -9,12 +9,20 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [city, setCity] = useState("");
   const [debouncedCity, setDebouncedCity] = useState("");
-  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [suggestions, setSuggestions] = useState<City[]>([]);
   const [weather, setWeather] = useState({ current: {} } as any);
-  const [location, setLocation] = useState<{
+  const [location, setLocation] = useState<City | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  
+  type City = {
     name: string;
     country: string;
-  } | null>(null);
+    admin1?: string;
+    latitude?: number;
+    longitude?: number;
+  };
 
 
   useEffect(() => {
@@ -22,14 +30,21 @@ export default function Home() {
       setDebouncedCity(city);
     }, 500);
 
+    if (city.length >= 1) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+
     return () => clearTimeout(timer);
   }, [city]);
 
   useEffect(() => {
     if (!debouncedCity || debouncedCity.trim().length < 2) {
       setSuggestions([]);
+      setLoading(false);
       return;
-    }
+    }  
     const fetchCities = async () => {
       const controller = new AbortController();
       try {
@@ -41,8 +56,10 @@ export default function Home() {
         if (!res.ok) {
           console.error("Search API error", res.status);
           setSuggestions([]);
+          setError("No search results found!");
           return;
         }
+        setError(null);
         const data = await res.json();
         setSuggestions(data.location);
         // console.log("suggestion cities:", data.location);
@@ -55,45 +72,66 @@ export default function Home() {
     fetchCities();
   }, [debouncedCity]);
 
-  const handleSearch = (city: string) => {
-    console.log("Searching for city:", city);
-    const res = fetch(`/api/weather?city=${city}`)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log("Weather data for", city, ":", result);
-        setLocation(result.location);
-        setWeather(result.weather);
-      })
-      .catch((error) => {
-        console.error("Error fetching weather data:", error);
-      });
-  };
+ 
+  const handleSelectCity = async (city: City) => {
+    try {
+      const res = await fetch(
+        `/api/weather?lat=${city.latitude}&lon=${city.longitude}&name=${city.name}&country=${city.country}`
+      );
+      if(!res.ok){
+        console.error("Weather API error", res.status);
+        return;
+      }
+      const data = await res.json();
+      setLocation(data.location);
+      setWeather(data.weather);
 
-  const handleSelectCity = async (city: any) => {
-    const res = await fetch(
-      `/api/weather?lat=${city.latitude}&lon=${city.longitude}&name=${city.name}&country=${city.country}`,
-    );
-
-    const data = await res.json();
-
-    setLocation(data.location);
-    setWeather(data.weather);
+    } catch (error) 
+    {
+      console.error("Error fetching weather data:", error);
+      return;
+      
+    } 
     setSuggestions([]); // close dropdown
     setCity(""); // clear input field
   };
 
   // remove duplicates from suggestions
-  const unique = suggestions.filter(
-    (item, index, self) =>
-      index ===
-      self.findIndex(
-        (t) =>
-          t.name === item.name &&
-          t.country === item.country &&
-          t.admin1 === item.admin1,
-      ),
-  );
+  // const unique = suggestions.filter(
+  //   (item, index, self) =>
+  //     index ===
+  //     self.findIndex(
+  //       (t) =>
+  //         t.name === item.name &&
+  //         t.country === item.country &&
+  //         t.admin1 === item.admin1,
+  //     ),
+  // );
   // console.log(unique);
+
+//   suggestions.forEach(item => {
+//   console.log(`${item.name}-${item.country}-${item.admin1}`);
+// });
+
+const normalize = (str?: string) =>
+  (str ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+
+const seen = new Set();
+const unique = suggestions.filter(item => {
+  const identifier = `${normalize(item.name)}-${normalize(item.country)}-${normalize(item.admin1) }`;
+  if (seen.has(identifier)) {
+    return false;
+  } else {
+    seen.add(identifier);
+    return true;
+  }
+});
+console.log(unique);
+
 
   return (
     <div className="container">
@@ -104,12 +142,14 @@ export default function Home() {
         </h1>
         {/* TODO: clear input field  */}
         <Search 
-          onSearch={handleSearch}
           value={city}
           onChange={setCity}
           suggestions={unique}
           onSelect={handleSelectCity}
+          loading={loading}
         />
+        {error && <p className="error-message">{error}</p>}
+        {error === null && location && weather ? (
         <section className="lg:flex gap-4">
           <article>
             <CurrentWeather
@@ -138,6 +178,7 @@ export default function Home() {
             />
           </aside>
         </section>
+      ) : null}
       </main>
     </div>
   );
