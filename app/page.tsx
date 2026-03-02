@@ -1,7 +1,7 @@
-'use client';
+"use client";
 import Header from "./components/Header";
 import Search from "./components/Search";
-import CurrentWeather from "./components/CurrentWeather"
+import CurrentWeather from "./components/CurrentWeather";
 import Daily from "./components/Daily";
 import Hourly from "./components/Hourly";
 import { useEffect, useState } from "react";
@@ -10,8 +10,12 @@ export default function Home() {
   const [city, setCity] = useState("");
   const [debouncedCity, setDebouncedCity] = useState("");
   const [suggestions, setSuggestions] = useState<any[]>([]);
-  const [weather, setWeather] = useState({current: {}} as any);
-  const [location, setLocation] = useState<{ name: string; country: string } | null>(null);
+  const [weather, setWeather] = useState({ current: {} } as any);
+  const [location, setLocation] = useState<{
+    name: string;
+    country: string;
+  } | null>(null);
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -22,69 +26,95 @@ export default function Home() {
   }, [city]);
 
   useEffect(() => {
-    if (!debouncedCity) {
+    if (!debouncedCity || debouncedCity.trim().length < 2) {
       setSuggestions([]);
       return;
     }
-
     const fetchCities = async () => {
-      const res = await fetch(`/api/search?city=${debouncedCity}`);
-      const data = await res.json();
-      setSuggestions(data.locations || []);
+      const controller = new AbortController();
+      try {
+        const q = encodeURIComponent(debouncedCity);
+        const res = await fetch(`/api/search?city=${q}`, {
+          signal: controller.signal,
+        });
+        // const res = await fetch(`/api/search?city=${debouncedCity}`);
+        if (!res.ok) {
+          console.error("Search API error", res.status);
+          setSuggestions([]);
+          return;
+        }
+        const data = await res.json();
+        setSuggestions(data.location);
+        // console.log("suggestion cities:", data.location);
+      } catch (error: any) {
+        console.error("Errror fetching cities:", error);
+        setSuggestions([]);
+      }
     };
 
     fetchCities();
-    console.log("suggestion cities:", suggestions);
   }, [debouncedCity]);
-
 
   const handleSearch = (city: string) => {
     console.log("Searching for city:", city);
     const res = fetch(`/api/weather?city=${city}`)
-      .then(response => response.json())
-      .then(result => {
+      .then((response) => response.json())
+      .then((result) => {
         console.log("Weather data for", city, ":", result);
         setLocation(result.location);
         setWeather(result.weather);
-        
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error fetching weather data:", error);
       });
-  }
+  };
 
   const handleSelectCity = async (city: any) => {
     const res = await fetch(
-      `/api/weather?lat=${city.latitude}&lon=${city.longitude}&name=${city.name}&country=${city.country}`
+      `/api/weather?lat=${city.latitude}&lon=${city.longitude}&name=${city.name}&country=${city.country}`,
     );
 
     const data = await res.json();
 
     setLocation(data.location);
     setWeather(data.weather);
-    setSuggestions([]); // chiude dropdown
+    setSuggestions([]); // close dropdown
+    setCity(""); // clear input field
   };
 
+  // remove duplicates from suggestions
+  const unique = suggestions.filter(
+    (item, index, self) =>
+      index ===
+      self.findIndex(
+        (t) =>
+          t.name === item.name &&
+          t.country === item.country &&
+          t.admin1 === item.admin1,
+      ),
+  );
+  // console.log(unique);
 
   return (
     <div className="container">
-    <Header/>
+      <Header />
       <main>
-        <h1 className="text-5xl font-display text-center">How's the sky looking today?</h1>
+        <h1 className="text-5xl font-display text-center">
+          How's the sky looking today?
+        </h1>
+        {/* TODO: clear input field  */}
         <Search 
-        
-        onSearch={handleSearch}
-         value={city}
-  onChange={setCity}
-  suggestions={suggestions}
-  onSelect={handleSelectCity}  
+          onSearch={handleSearch}
+          value={city}
+          onChange={setCity}
+          suggestions={unique}
+          onSelect={handleSelectCity}
         />
         <section className="lg:flex gap-4">
           <article>
-            
-            <CurrentWeather 
-              city={location?.name} 
-              country={location?.country} 
+            <CurrentWeather
+              city={location?.name}
+              country={location?.country}
               date={weather?.current?.time}
               temperature={weather?.current?.temperature_2m}
               feelsLike={weather?.current?.apparent_temperature}
@@ -93,22 +123,21 @@ export default function Home() {
               condition={weather?.current?.weather_code}
               precipitation={weather?.current?.precipitation}
             />
-            <Daily 
+            <Daily
               weatherCode={weather.daily?.weather_code}
               tempMax={weather.daily?.temperature_2m_max}
               tempMin={weather.daily?.temperature_2m_min}
             />
           </article>
           <aside>
-            <Hourly 
+            <Hourly
               currentTime={weather.current.time}
               weatherCode={weather.hourly?.weather_code}
-              temperature = {weather.hourly?.temperature_2m}
+              temperature={weather.hourly?.temperature_2m}
               time={weather.hourly?.time}
             />
           </aside>
         </section>
-     
       </main>
     </div>
   );

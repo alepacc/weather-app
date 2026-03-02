@@ -4,8 +4,8 @@ export async function GET(req:Request){
     const { searchParams } = new URL(req.url);
     
     const { latitude, longitude, name, country } = {
-        latitude: searchParams.get("latitude"),
-        longitude: searchParams.get("longitude"),
+        latitude: searchParams.get("lat"),
+        longitude: searchParams.get("lon"),
         name: searchParams.get("name"),
         country: searchParams.get("country"),
     };

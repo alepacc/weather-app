@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"; 
 
 export async function GET(req:Request) {
-    const {searchParams } = new URL(req.url);
+    const { searchParams } = new URL(req.url);
     const city = searchParams.get("city");
 
     if(!city){

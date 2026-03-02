@@ -16,17 +16,17 @@ export default function Search({
 }) {
   const [city, setCity] = useState(value);
 
-  const handleSearch = async () => {
-    onSearch(city);
+  const handleSearch = (e: any) => {
+    e.preventDefault();
+    if (suggestions.length > 0) {
+      onSelect(suggestions[0]); // fallback to first suggestion if user submits without selecting
+    }
   };
 
   return (
     <div className="search-container">
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSearch();
-        }}
+        onSubmit={handleSearch}
       >
         <div className="search-input-wrapper ">
           <img
@@ -47,13 +47,16 @@ export default function Search({
               onChange(e.target.value);
             }}
           />
-          <ul className="suggestions-list">
+          {suggestions.length > 0 ? (
+            <ul className="suggestions-list">
             {suggestions.map((suggestion, index) => (
-              <li key={index} onClick={() => onSelect(suggestion)}>
-                {suggestion.name}, {suggestion.country}
+              <li key={index} className="suggestion" onClick={() => onSelect(suggestion) }>
+                {suggestion.name}, {suggestion.country}, {suggestion.admin1}
               </li>
             ))}
           </ul>
+          ) : null}
+          
         </div>
         <button id="search-button" type="submit" className="btn-primary">
           Search
