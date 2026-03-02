@@ -4,8 +4,8 @@ import { formatDate }  from "../utils/formatDate"
 
 export default function CurrentWeather(
     props: { 
-        city: string; 
-        country: string;
+        city?: string; 
+        country?: string;
         date?: string;
         temperature?: number;
         condition?: number;

@@ -102,12 +102,26 @@
   /* Search Input Wrapper */
   .search-input-wrapper {
     @apply bg-neutral-700 flex gap-2 px-4 py-2 rounded-xl items-center w-full;
+    @apply relative;
   }
 
   /* Search Input */
   .search-input {
     @apply w-full outline-none bg-transparent text-neutral-0 placeholder:text-neutral-300;
     @apply hover:cursor-pointer;
+  }
+
+  .suggestions-list{
+    @apply absolute bg-neutral-700 px-4 py-2 rounded-xl w-full shadow-lg;
+    @apply flex flex-col gap-2;
+    @apply border-neutral-600 border;
+    @apply top-full left-0 mt-2;
+  }
+  .suggestion{
+    @apply px-2 py-1;
+  }
+  .suggestion:active{
+    @apply bg-neutral-600 rounded hover:cursor-pointer w-full;
   }
 
   /* ––––––– HEADER ––––––– */
@@ -190,3 +204,6 @@
     
   }
 }
+
+
+/* TODO: add focus state*/
