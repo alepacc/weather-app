@@ -14,7 +14,6 @@ export default function Home() {
   const [location, setLocation] = useState<City | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
   
   type City = {
     name: string;
@@ -85,7 +84,7 @@ export default function Home() {
       const data = await res.json();
       setLocation(data.location);
       setWeather(data.weather);
-
+      console.log("weather data:", data.weather);
     } catch (error) 
     {
       console.error("Error fetching weather data:", error);
@@ -95,23 +94,6 @@ export default function Home() {
     setSuggestions([]); // close dropdown
     setCity(""); // clear input field
   };
-
-  // remove duplicates from suggestions
-  // const unique = suggestions.filter(
-  //   (item, index, self) =>
-  //     index ===
-  //     self.findIndex(
-  //       (t) =>
-  //         t.name === item.name &&
-  //         t.country === item.country &&
-  //         t.admin1 === item.admin1,
-  //     ),
-  // );
-  // console.log(unique);
-
-//   suggestions.forEach(item => {
-//   console.log(`${item.name}-${item.country}-${item.admin1}`);
-// });
 
 const normalize = (str?: string) =>
   (str ?? "")
@@ -130,17 +112,16 @@ const unique = suggestions.filter(item => {
     return true;
   }
 });
-console.log(unique);
+// console.log(unique);
 
 
   return (
     <div className="container">
-      <Header />
+      <Header/>
       <main>
         <h1 className="text-5xl font-display text-center">
           How's the sky looking today?
         </h1>
-        {/* TODO: clear input field  */}
         <Search 
           value={city}
           onChange={setCity}

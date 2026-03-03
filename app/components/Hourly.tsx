@@ -4,6 +4,8 @@ import Dropdown from "./Dropdown";
 import { useEffect, useMemo, useState } from "react";
 import { weatherCodeMap } from "../utils/weatherCodeMap";
 import { getDay, getTimeShort } from "../utils/formatDate";
+import { useUnit } from "../context/unitContext";
+import { cToF } from "../utils/conversions";
 
 export default function Hourly(props: {
   currentTime: Date;
@@ -14,6 +16,7 @@ export default function Hourly(props: {
   const { currentTime, weatherCode, temperature, time } = props;
   const currentDay = currentTime ? getDay(currentTime.toString()) : "";
   const [day, setDay] = useState<string | null>(currentDay || null);
+  const { unit } = useUnit();
 
   // set the current day as default value for the dropdown when the component mounts
   useEffect(() => {
@@ -73,7 +76,11 @@ export default function Hourly(props: {
               {item.hour}
             </span>
 
-            <span className="hourly__temp">{item.temperature}°</span>
+            <span className="hourly__temp">
+              {unit === "metric"
+                ? `${Math.round(item.temperature)}°`
+                : `${cToF(item.temperature).toFixed(0)}°`}
+            </span>
           </div>
         ))}
         </div>

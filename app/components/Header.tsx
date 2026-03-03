@@ -1,12 +1,16 @@
 'use client';
 import Image from "next/image";
 import { useState } from "react";
+import { useUnit } from "../context/unitContext";
+
 
 export default function Header() {
     const [isOpen, setIsOpen] = useState(false);
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
+
+    const { unit, toggleUnit } = useUnit();
     
     return (
         <header >
@@ -22,7 +26,9 @@ export default function Header() {
             {isOpen && (
             <div className="dropdown-header">
                 {/* TODO: fix dropdown actions */}
-                <div className="dropdown__button" role="button">Switch to Imperial/Metric</div>
+                <div className="dropdown__button" role="button" onClick={toggleUnit}>
+                    Switch to {unit==="metric" ? "Imperial": "Metric"}
+                    </div>
 
                 <div className="dropdown__group">
                     <div className="dropdown__title">Temperature</div>

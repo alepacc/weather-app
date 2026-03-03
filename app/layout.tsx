@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 // import { Geist, Geist_Mono } from "next/font/google";
 import { bricolageGrotesque, dmSans }  from "./fonts";
 import "./globals.css";
+import { UnitProvider } from "./context/unitContext";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -26,7 +27,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${dmSans.variable} ${bricolageGrotesque.variable}`}>
       <body>
-        {children}
+        <UnitProvider>
+          {children}
+        </UnitProvider>
       </body>
     </html>
   );
