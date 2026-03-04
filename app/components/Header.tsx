@@ -30,18 +30,17 @@ export default function Header() {
                     Switch to {unit==="metric" ? "Imperial": "Metric"}
                     </div>
                 <div className="dropdown__group">
-                    <div className="dropdown__title">Temperature</div>
+                    <div className="dropdown__title py-0">Temperature</div>
                     <span className={`unit-item ${isMetric ? " active_btn" : ""}`}>Celsius (°C)</span>
                     <span className={`unit-item ${!isMetric ? " active_btn" : ""}`}>Fahrenheit (°F)</span>
                 </div>
-                <hr />
+                <hr className="bg-neutral-600 border-t-2 border-neutral-600"/>
                 <div className="dropdown__group">
                     <div className="dropdown__title">Wind Speed</div>
                     <span className={`unit-item ${isMetric ? " active_btn" : ""}`}>km/h</span>
                     <span className={`unit-item ${!isMetric ? " active_btn" : ""}`}>mph</span>
                 </div>
-                <hr />
-                <div className="dropdown__group">
+                <div className="dropdown__group border-t-2 border-neutral-600">
                     <div className="dropdown__title">Precipitation</div>
                     <span className={`unit-item ${isMetric ? " active_btn" : ""}`}>Millimeters (mm)</span>
                     <span className={`unit-item ${!isMetric ? " active_btn" : ""}`}>Inches (in)</span>
