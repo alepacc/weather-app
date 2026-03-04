@@ -5,6 +5,7 @@ import CurrentWeather from "./components/CurrentWeather";
 import Daily from "./components/Daily";
 import Hourly from "./components/Hourly";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Home() {
   const [city, setCity] = useState("");
@@ -14,6 +15,8 @@ export default function Home() {
   const [location, setLocation] = useState<City | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const [apiError, setApiError] = useState<boolean>(false);
   
   type City = {
     name: string;
@@ -52,6 +55,11 @@ export default function Home() {
           signal: controller.signal,
         });
         // const res = await fetch(`/api/search?city=${debouncedCity}`);
+        if (res.status === 500) {
+          console.warn("Error:", res.status);
+          setApiError(true);
+          return;
+        }
         if (!res.ok) {
           console.error("Search API error", res.status);
           setSuggestions([]);
@@ -61,6 +69,7 @@ export default function Home() {
         setError(null);
         const data = await res.json();
         setSuggestions(data.location);
+       
         // console.log("suggestion cities:", data.location);
       } catch (error: any) {
         console.error("Errror fetching cities:", error);
@@ -82,6 +91,10 @@ export default function Home() {
         return;
       }
       const data = await res.json();
+      if (data.weather.error) {
+        setApiError(true);
+        return;
+      }
       setLocation(data.location);
       setWeather(data.weather);
       console.log("weather data:", data.weather);
@@ -118,7 +131,18 @@ const unique = suggestions.filter(item => {
   return (
     <div className="container">
       <Header/>
-      <main>
+      {apiError ? (
+        <div className="api-error items-center flex flex-col gap-4 p-4 text-center">
+          <Image src="/images/icon-error.svg" alt="error img" width={20} height={20}/>
+          <h1 className="text-5xl text-center">Something went wrong</h1>
+          <p>We coudn't connect to the server (API error). Please try again in a few moments.</p>
+          <button className="btn-primary flex gap-2" onClick={() => window.location.reload()}>
+            <Image src="/images/icon-retry.svg" alt="retry img" width={15} height={15}/>
+            Retry
+          </button>
+        </div>
+      ) : (
+        <main>
         <h1 className="text-5xl font-display text-center">
           How's the sky looking today?
         </h1>
@@ -164,6 +188,8 @@ const unique = suggestions.filter(item => {
         </section>
       ) : null}
       </main>
+      )}
     </div>
+  
   );
 }

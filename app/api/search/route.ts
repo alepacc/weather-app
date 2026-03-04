@@ -13,6 +13,11 @@ export async function GET(req:Request) {
         `https://geocoding-api.open-meteo.com/v1/search?name=${city}`
     );
 
+    if (!geoRes.ok) {
+        console.error("Error fetching geocoding data:", geoRes.status);
+        return NextResponse.json({ error: "Error fetching geocoding data" }, { status: 500 });
+    }
+
     const geoData = await geoRes.json();
 
     if (!geoData.results || geoData.results.length === 0) {

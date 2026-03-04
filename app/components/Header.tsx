@@ -16,7 +16,7 @@ export default function Header() {
     
     return (
         <header >
-            <Image src="/images/logo.svg" alt="Weather App Logo" width={100} height={40} />
+            <Image src="/images/logo.svg" alt="Weather App Logo" width={150} height={50} />
             
             <div className="units-dropdown" role="button" onClick={toggleDropdown} tabIndex={1} onKeyDown={(e) => { if (e.key === 'Enter') toggleDropdown(); }}>
                 <span className="units-dropdown-label">
