@@ -75,7 +75,7 @@
   }
 
   .active_btn{
-    @apply bg-neutral-600 rounded;
+    @apply bg-neutral-600 rounded-md;
   }
 
   /* ––––––– PAGES ––––––– */
@@ -131,15 +131,41 @@
 
   .units-dropdown {
     @apply flex bg-neutral-700 rounded-md py-2 px-4 relative;
-    @apply hover:cursor-pointer;
   }
 
   .units-dropdown-label {
     @apply flex items-center gap-2;
+    @apply hover:cursor-pointer;
   }
 
   .dropdown-header {
-    @apply absolute right-0 top-full mt-2 w-48 bg-neutral-700 rounded shadow-lg p-4 z-10 text-neutral-300;
+    @apply absolute right-0 top-full mt-2 w-48 bg-neutral-700 rounded-md shadow-lg p-2 z-10 text-neutral-300;
+  }
+
+  .dropdown__button{
+    @apply hover:bg-neutral-600 rounded-md text-neutral-0 px-2 py-1;
+    @apply hover:cursor-pointer;
+  }
+
+  .dropdown__group {
+    @apply flex flex-col gap-1 py-1;
+  }
+
+  .dropdown__title{
+    @apply px-2;
+  }
+
+  .unit-item{
+    @apply text-neutral-0 flex justify-between py-1 px-2 items-center;
+  }
+
+  .unit-item.active_btn::after {
+    content: '';
+    background-image: url('/images/icon-checkmark.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
   }
 
   /* ––––––– HOURLY ––––––– */
