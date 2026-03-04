@@ -1,7 +1,6 @@
 'use client';
-import Image from "next/image";
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Zap } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 type DropdownProps = {
   label: string;
