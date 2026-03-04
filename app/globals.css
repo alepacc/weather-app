@@ -35,6 +35,10 @@
   h2 {
     font-family: var(--font-display);
   }
+
+  *:focus-visible{
+    @apply outline outline-offset-2 outline-neutral-0;
+  }
 }
 
 @layer components {
@@ -102,13 +106,21 @@
   /* Search Input Wrapper */
   .search-input-wrapper {
     @apply bg-neutral-700 flex gap-2 px-4 py-2 rounded-xl items-center w-full;
-    @apply relative;
+    @apply relative focus-visible:outline;
+  }
+
+  .search-input-wrapper:focus-within {
+    @apply outline outline-neutral-0 outline-offset-2;
   }
 
   /* Search Input */
   .search-input {
     @apply w-full outline-none bg-transparent text-neutral-0 placeholder:text-neutral-300;
     @apply hover:cursor-pointer;
+  }
+
+  .search-button:focus-visible{
+    @apply outline outline-offset-2 outline-blue-500;
   }
 
   .suggestions-list{

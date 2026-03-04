@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function Search({
   value,
@@ -55,13 +56,16 @@ export default function Search({
               ))}
             </ul>
           ) : 
-           loading && (<div className="suggestions-list">Loading...</div>
-           )  
-            
+           loading && (
+           <div className="suggestions-list flex-row items-center gap-2">
+              <Image className="animate-spin" src="/images/icon-loading.svg" alt="icon loading" width={15} height={15} />
+              Search in progress
+              </div>
+            )   
           }
           
         </div>
-        <button id="search-button" type="submit" className="btn-primary">
+        <button id="search-button" type="submit" className="btn-primary search-button">
           Search
         </button>
       </form>

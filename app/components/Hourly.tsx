@@ -63,7 +63,7 @@ export default function Hourly(props: {
             onChange={setDay}
           />
         </span>
-        <div className="hourly__list">
+        <div className="hourly__list" tabIndex={-1}>
         {filteredHourly.map((item, index) => (
           <div key={index} className="hourly__item">
             <span className="hourly__time">

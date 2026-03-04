@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useUnit } from "../context/unitContext";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 
 export default function Header() {
@@ -17,16 +18,21 @@ export default function Header() {
         <header >
             <Image src="/images/logo.svg" alt="Weather App Logo" width={100} height={40} />
             
-            <div className="units-dropdown" role="button" onClick={toggleDropdown}>
+            <div className="units-dropdown" role="button" onClick={toggleDropdown} tabIndex={1} onKeyDown={(e) => { if (e.key === 'Enter') toggleDropdown(); }}>
                 <span className="units-dropdown-label">
                     <Image src="/images/icon-units.svg" alt="Units Icon" width={16} height={16} />
                      Units
-                    <Image src="/images/icon-dropdown.svg" alt="Dropdown Icon" width={12} height={8} />
+                    {/* <Image src="/images/icon-dropdown.svg" alt="Dropdown Icon" width={12} height={8} /> */}
+                    { isOpen ? ( 
+                        <ChevronUp className="dropdown-chevron" />
+                    ) : (
+                        <ChevronDown className="dropdown-chevron" />
+                    )}
                 </span>
             
             {isOpen && (
             <div className="dropdown-header">
-                <div className="dropdown__button" role="button" onClick={toggleUnit}>
+                <div className="dropdown__button" role="button" onClick={toggleUnit} tabIndex={1} onKeyDown={(e) => { if (e.key === 'Enter') toggleUnit(); }}>
                     Switch to {unit==="metric" ? "Imperial": "Metric"}
                     </div>
                 <div className="dropdown__group">
