@@ -4,8 +4,9 @@ import Search from "./components/Search";
 import CurrentWeather from "./components/CurrentWeather";
 import Daily from "./components/Daily";
 import Hourly from "./components/Hourly";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { City } from "./types/city";
 
 export default function Home() {
   const [city, setCity] = useState("");
@@ -17,15 +18,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   const [apiError, setApiError] = useState<boolean>(false);
-  
-  type City = {
-    name: string;
-    country: string;
-    admin1?: string;
-    latitude?: number;
-    longitude?: number;
-  };
-
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -46,7 +38,7 @@ export default function Home() {
       setSuggestions([]);
       setLoading(false);
       return;
-    }  
+    }
     const fetchCities = async () => {
       const controller = new AbortController();
       try {
@@ -69,7 +61,7 @@ export default function Home() {
         setError(null);
         const data = await res.json();
         setSuggestions(data.location);
-       
+
         // console.log("suggestion cities:", data.location);
       } catch (error: any) {
         console.error("Errror fetching cities:", error);
@@ -80,13 +72,12 @@ export default function Home() {
     fetchCities();
   }, [debouncedCity]);
 
- 
   const handleSelectCity = async (city: City) => {
     try {
       const res = await fetch(
-        `/api/weather?lat=${city.latitude}&lon=${city.longitude}&name=${city.name}&country=${city.country}`
+        `/api/weather?lat=${city.latitude}&lon=${city.longitude}&name=${city.name}&country=${city.country}`,
       );
-      if(!res.ok){
+      if (!res.ok) {
         console.error("Weather API error", res.status);
         return;
       }
@@ -98,98 +89,109 @@ export default function Home() {
       setLocation(data.location);
       setWeather(data.weather);
       console.log("weather data:", data.weather);
-    } catch (error) 
-    {
+    } catch (error) {
       console.error("Error fetching weather data:", error);
-      return;
-      
-    } 
-    setSuggestions([]); // close dropdown
-    setCity(""); // clear input field
+    } finally {
+      setSuggestions([]); // close dropdown
+      setCity(""); // clear input field
+    }
   };
 
-const normalize = (str?: string) =>
-  (str ?? "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .trim();
+  const normalize = (str?: string) =>
+    (str ?? "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim();
 
-const seen = new Set();
-const unique = suggestions.filter(item => {
-  const identifier = `${normalize(item.name)}-${normalize(item.country)}-${normalize(item.admin1) }`;
-  if (seen.has(identifier)) {
-    return false;
-  } else {
-    seen.add(identifier);
-    return true;
-  }
-});
-// console.log(unique);
-
+  const unique = useMemo(() => {
+    const seen = new Set();
+    return suggestions.filter((item) => {
+      const identifier = `${normalize(item.name)}-${normalize(item.country)}-${normalize(item.admin1)}`;
+      if (seen.has(identifier)) return false;
+      seen.add(identifier);
+      return true;
+    });
+  }, [suggestions]);
+  // console.log(unique);
 
   return (
     <div className="container">
-      <Header/>
+      <Header />
       {apiError ? (
         <div className="api-error items-center flex flex-col gap-4 p-4 text-center">
-          <Image src="/images/icon-error.svg" alt="error img" width={20} height={20}/>
+          <Image
+            src="/images/icon-error.svg"
+            alt="error img"
+            width={20}
+            height={20}
+          />
           <h1 className="text-5xl text-center">Something went wrong</h1>
-          <p>We coudn't connect to the server (API error). Please try again in a few moments.</p>
-          <button className="btn-primary flex gap-2" onClick={() => window.location.reload()}>
-            <Image src="/images/icon-retry.svg" alt="retry img" width={15} height={15}/>
+          <p>
+            We coudn't connect to the server (API error). Please try again in a
+            few moments.
+          </p>
+          <button
+            className="btn-primary flex gap-2"
+            onClick={() => window.location.reload()}
+          >
+            <Image
+              src="/images/icon-retry.svg"
+              alt="retry img"
+              width={15}
+              height={15}
+            />
             Retry
           </button>
         </div>
       ) : (
         <main>
-        <h1 className="text-5xl font-display text-center">
-          How's the sky looking today?
-        </h1>
-        <Search 
-          value={city}
-          onChange={setCity}
-          suggestions={unique}
-          onSelect={handleSelectCity}
-          loading={loading}
-        />
-        {error && <p className="error-message">{error}</p>}
-        {error === null && location && weather ? (
-        <section className="lg:flex gap-4">
-          <article>
-            <CurrentWeather
-              city={location?.name}
-              country={location?.country}
-              date={weather?.current?.time}
-              temperature={weather?.current?.temperature_2m}
-              feelsLike={weather?.current?.apparent_temperature}
-              humidity={weather?.current?.relative_humidity_2m}
-              windSpeed={weather?.current?.wind_speed_10m}
-              condition={weather?.current?.weather_code}
-              precipitation={weather?.current?.precipitation}
-            />
-          {weather?.daily && (
-            <Daily 
-              days={weather.daily.time}
-              weatherCode={weather.daily.weather_code}
-              tempMax={weather.daily.temperature_2m_max}
-              tempMin={weather.daily.temperature_2m_min}
-            />
-          )}
-          </article>
-          <aside>
-            <Hourly
-              currentTime={weather.current.time}
-              weatherCode={weather.hourly?.weather_code}
-              temperature={weather.hourly?.temperature_2m}
-              time={weather.hourly?.time}
-            />
-          </aside>
-        </section>
-      ) : null}
-      </main>
+          <h1 className="text-5xl font-display text-center">
+            How's the sky looking today?
+          </h1>
+          <Search
+            value={city}
+            onChange={setCity}
+            suggestions={unique}
+            onSelect={handleSelectCity}
+            loading={loading}
+          />
+          {error && <p className="error-message">{error}</p>}
+          {error === null && location && weather ? (
+            <section className="lg:flex gap-4">
+              <article>
+                <CurrentWeather
+                  city={location?.name}
+                  country={location?.country}
+                  date={weather?.current?.time}
+                  temperature={weather?.current?.temperature_2m}
+                  feelsLike={weather?.current?.apparent_temperature}
+                  humidity={weather?.current?.relative_humidity_2m}
+                  windSpeed={weather?.current?.wind_speed_10m}
+                  condition={weather?.current?.weather_code}
+                  precipitation={weather?.current?.precipitation}
+                />
+                {weather?.daily && (
+                  <Daily
+                    days={weather.daily.time}
+                    weatherCode={weather.daily.weather_code}
+                    tempMax={weather.daily.temperature_2m_max}
+                    tempMin={weather.daily.temperature_2m_min}
+                  />
+                )}
+              </article>
+              <aside>
+                <Hourly
+                  currentTime={weather.current.time}
+                  weatherCode={weather.hourly?.weather_code}
+                  temperature={weather.hourly?.temperature_2m}
+                  time={weather.hourly?.time}
+                />
+              </aside>
+            </section>
+          ) : null}
+        </main>
       )}
     </div>
-  
   );
 }
