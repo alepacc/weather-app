@@ -55,6 +55,7 @@ export default function Home() {
         if (!res.ok) {
           console.error("Search API error", res.status);
           setSuggestions([]);
+          setLoading(false);
           setError("No search results found!");
           return;
         }
@@ -62,7 +63,6 @@ export default function Home() {
         const data = await res.json();
         setSuggestions(data.location);
 
-        // console.log("suggestion cities:", data.location);
       } catch (error: any) {
         console.error("Errror fetching cities:", error);
         setSuggestions([]);
@@ -71,6 +71,35 @@ export default function Home() {
 
     fetchCities();
   }, [debouncedCity]);
+
+  useEffect(() => {
+  const fetchByCoords = async (lat: number, lon: number, name: string, country: string) => {
+    try {
+      const res = await fetch(`/api/weather?lat=${lat}&lon=${lon}&name=${name}&country=${country}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.weather.error) { setApiError(true); return; }
+      setLocation(data.location);
+      setWeather(data.weather);
+    } catch (error) {
+      console.error("Geolocation fetch error:", error);
+    }
+  };
+  // default to Rome if geolocation fails or is denied
+  if(!navigator.geolocation) {
+    fetchByCoords(41.9028, 12.4964, "Rome", "Italy");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      fetchByCoords(position.coords.latitude, position.coords.longitude, "Your Location", "");
+    },
+    () => {
+      fetchByCoords(41.9028, 12.4964, "Rome", "Italy");
+    }
+  );
+}, []);
 
   const handleSelectCity = async (city: City) => {
     try {
@@ -92,7 +121,7 @@ export default function Home() {
     } catch (error) {
       console.error("Error fetching weather data:", error);
     } finally {
-      setSuggestions([]); // close dropdown
+      setSuggestions([]); 
       setCity(""); // clear input field
     }
   };
@@ -113,7 +142,6 @@ export default function Home() {
       return true;
     });
   }, [suggestions]);
-  // console.log(unique);
 
   return (
     <div className="container">
