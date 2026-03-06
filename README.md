@@ -62,7 +62,6 @@ This project was built to practice and demonstrate:
 
 
 
-
 ## Project Structure
 
 ```
@@ -123,7 +122,7 @@ The app supports **Metric** and **Imperial** units. A React Context stores the s
 
 
 
-## ⚡ Installation
+## Installation
 
 Clone the repository:
 
@@ -157,7 +156,7 @@ http://localhost:3000
 
 
 
-## 📡 APIs Used
+## APIs Used
 
 - **[Open-Meteo Weather API](https://open-meteo.com/)** — Weather forecast data
 - **Open-Meteo Geocoding API** — City search and location coordinates
