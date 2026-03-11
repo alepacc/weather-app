@@ -15,8 +15,14 @@ export const dmSans = localFont({
   src: [
     {
       path: "../public/fonts/DM_Sans/DMSans-VariableFont_opsz,wght.ttf",
-      weight: " 300, 500, 600, 600i, 700",
+      weight: '300 700',
+      style: "normal",
     },
+    {
+      path: "../public/fonts/DM_Sans/DMSans-Italic-VariableFont_opsz,wght.ttf",
+      weight: '600',
+      style: "italic",
+    }
   ],
   variable: "--font-dm-sans",
   display: "swap",
